@@ -1,0 +1,22 @@
+Function TextBase64Encode(strText, strCharset)
+
+    Dim arrBytes
+
+    With CreateObject("ADODB.Stream")
+        .Type = 2 ' adTypeText
+        .Open
+        .Charset = strCharset
+        .WriteText strText
+        .Position = 0
+        .Type = 1 ' adTypeBinary
+        arrBytes = .Read
+        .Close
+    End With
+
+    With CreateObject("MSXML2.DOMDocument").createElement("tmp")
+        .DataType = "bin.base64"
+        .nodeTypedValue = arrBytes
+        TextBase64Encode = Replace(Replace(.Text, vbCr, ""), vbLf, "")
+    End With
+
+End Function

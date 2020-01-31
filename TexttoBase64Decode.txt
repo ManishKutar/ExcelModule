@@ -1,0 +1,22 @@
+Function TextBase64Decode(strBase64, strCharset)
+
+    Dim arrBinary
+
+    With CreateObject("MSXML2.DOMDocument").createElement("tmp")
+        .DataType = "bin.base64"
+        .Text = strBase64
+        arrBinary = .nodeTypedValue
+    End With
+
+    With CreateObject("ADODB.Stream")
+        .Type = 1 ' adTypeBinary
+        .Open
+        .Write arrBinary
+        .Position = 0
+        .Type = 2 ' adTypeText
+        .Charset = strCharset
+        TextBase64Decode = .ReadText
+        .Close
+    End With
+
+End Function
